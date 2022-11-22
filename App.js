@@ -2,6 +2,7 @@ import './styles/main.css'
 import { View } from 'react-native';
 import Task from './components/Task'
 import ListTitle from './components/ListTitle'
+import Create from './components/create';
 import { useState, useEffect } from 'react';
 
 export default function App() {
@@ -35,7 +36,8 @@ export default function App() {
   ])
 
   const [tasks, setTasks] = useState(firstTasks);
-  const [reset, setReset] = useState(0)
+  const [reset, setReset] = useState(0);
+  const [doneTasks, setDoneTasks] = useState([]);
 
   useEffect(() => {
     return () => {
@@ -55,11 +57,9 @@ export default function App() {
     }
   }, [firstTasks]);
 
-  const [doneTasks, setDoneTasks] = useState([]);
-
-  useEffect(()=>{
+  useEffect(() => {
     setReset(reset + 1);
-  },[doneTasks])
+  }, [doneTasks])
 
   return (
     <View
@@ -77,13 +77,11 @@ export default function App() {
       {
         tasks.map((task, index) => {
           return <Task key={index} op={task.opacity} title={task.title} time={task.time} index={task.id} allTasks={tasks} setTaskList={setFirstTasks} reset={reset}
-          doneList={doneTasks} setDoneList={setDoneTasks} />
+            doneList={doneTasks} setDoneList={setDoneTasks} />
         })
       }
 
-      <button className="fab">
-        +
-      </button>
+      <Create />
     </View>
   );
 }

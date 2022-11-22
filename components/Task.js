@@ -19,6 +19,7 @@ export default function Task({ title, time, index, setTaskList, allTasks, op, re
         allTasks.map((tazk) => {
             if (tazk.id == index) {
                 if (isDone) {
+                        console.log(doneList);
                         setDoneList([...doneList, tazk]);
                 }
                 let taskk = tazk;

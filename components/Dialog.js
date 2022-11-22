@@ -11,7 +11,10 @@ export default function Dialog({ openDialog, dialogOpacity, openSetter, opacityS
     if(openDialog){
         return (
             <div className="alert-bg" style={{ opacity: dialogOpacity, transition: '250ms' }}>
-                <div className="alert">
+                <div className="alert" 
+                style={{
+                    justifyContent:'space-evenly'
+                }}>
                     <span style={{width: '75%'}}>
                     "{taskName.length > 30 && taskName.substr(0,30) + '...' || taskName}." <br />
                     adlı görevi silmek istediğinize emin misiniz?
