@@ -12,14 +12,14 @@ export default function Task({ title, time, index, setTaskList, allTasks, op, re
     const [dialogAnswer, setDialogAnswer] = useState('c');
     const [openDialog, setOpenDialog] = useState(false);
     const [dialogOpacity, setDialogOpacity] = useState(1);
+    const [lastPosition, setLastPosition] = useState(0);
 
     function changeTasks(isDone) {
         let allTaskLocal = []
-
         allTasks.map((tazk) => {
             if (tazk.id == index) {
                 if (isDone) {
-                    setDoneList([...doneList, tazk]);
+                        setDoneList([...doneList, tazk]);
                 }
                 let taskk = tazk;
                 taskk.opacity = 0;
@@ -28,7 +28,10 @@ export default function Task({ title, time, index, setTaskList, allTasks, op, re
             allTaskLocal.push(tazk);
         })
         setTaskList(allTaskLocal);
+        setLastPosition(0);
     }
+
+
 
     function getAnswerFromDialog(answer) {
         if (answer[answer.length - 1] === 'a') {
@@ -41,7 +44,12 @@ export default function Task({ title, time, index, setTaskList, allTasks, op, re
     }
 
     function trackPosition(pos) {
-        if (pos.x > 20) {
+        if (lastPosition <= 20 && pos.x > 20) {
+            console.log({
+                lastPosition,
+                pos: pos.x
+            })
+            setLastPosition(21);
             setDragDisable(true);
             setTaskX(20);
             changeTasks(true);
@@ -59,6 +67,7 @@ export default function Task({ title, time, index, setTaskList, allTasks, op, re
             setXPosition(pos.x);
             setDragDisable(false);
         }
+        setLastPosition(pos.x);
     }
 
     useEffect(() => {

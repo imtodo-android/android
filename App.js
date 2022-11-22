@@ -58,7 +58,7 @@ export default function App() {
   const [doneTasks, setDoneTasks] = useState([]);
 
   useEffect(()=>{
-    console.log(doneTasks);
+    setReset(reset + 1);
   },[doneTasks])
 
   return (
@@ -72,7 +72,7 @@ export default function App() {
         }
       }
     >
-      <ListTitle title="Önemli işlerin" />
+      <ListTitle title="Görevlerin" />
 
       {
         tasks.map((task, index) => {
@@ -80,6 +80,10 @@ export default function App() {
           doneList={doneTasks} setDoneList={setDoneTasks} />
         })
       }
+
+      <button className="fab">
+        +
+      </button>
     </View>
   );
 }
