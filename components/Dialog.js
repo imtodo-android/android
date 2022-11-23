@@ -4,7 +4,6 @@ export default function Dialog({ openDialog, dialogOpacity, openSetter, opacityS
         opacitySetter(0);
         setTimeout(() => {
             openSetter(false);
-            console.log(dialoga);
         }, 250)
     }
 

@@ -123,6 +123,7 @@ body {
 }
 
 .alert {
+    overflow-y: auto;
     font-size: 10px;
     width: 70%;
     height: 70vw;
@@ -162,6 +163,19 @@ body {
     color:#FAFAFA;
 }
 
+.button{
+    padding:20px;
+    border-radius: 12px;
+    margin-bottom: 40px;
+    background-color: #87B2F8;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    border:0px;
+    color:#FAFAFA;
+}
+
 .title{
     font-size:14px;
 }
@@ -178,7 +192,8 @@ body {
         width: 100%;
     }
     .h-75{
-        height: 75vh;
+        min-height: 75vh;
+        overflow-y: auto;
     }
 }
 
@@ -193,7 +208,7 @@ body {
 
     .alert {
         font-size: 18px;
-        height: 40vw;
+        height: 45vw;
     }
 
     .primary-button {

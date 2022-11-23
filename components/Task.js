@@ -19,8 +19,7 @@ export default function Task({ title, time, index, setTaskList, allTasks, op, re
         allTasks.map((tazk) => {
             if (tazk.id == index) {
                 if (isDone) {
-                        console.log(doneList);
-                        setDoneList([...doneList, tazk]);
+                    setDoneList([...doneList, tazk]);
                 }
                 let taskk = tazk;
                 taskk.opacity = 0;
@@ -29,10 +28,7 @@ export default function Task({ title, time, index, setTaskList, allTasks, op, re
             allTaskLocal.push(tazk);
         })
         setTaskList(allTaskLocal);
-        setLastPosition(0);
     }
-
-
 
     function getAnswerFromDialog(answer) {
         if (answer[answer.length - 1] === 'a') {
@@ -46,14 +42,13 @@ export default function Task({ title, time, index, setTaskList, allTasks, op, re
 
     function trackPosition(pos) {
         if (lastPosition <= 20 && pos.x > 20) {
-            console.log({
-                lastPosition,
-                pos: pos.x
-            })
-            setLastPosition(21);
             setDragDisable(true);
             setTaskX(20);
-            changeTasks(true);
+            setXPosition(20);
+            setLastPosition(21);
+            setTimeout(() => {
+                changeTasks(true);
+            }, 100)
         }
 
         else if (pos.x * -1 > 20) {
@@ -64,9 +59,18 @@ export default function Task({ title, time, index, setTaskList, allTasks, op, re
         }
 
         else {
-            setTaskX(pos.x);
-            setXPosition(pos.x);
-            setDragDisable(false);
+            if (pos.x > 20) {
+                setTaskX(20);
+                setXPosition(20);
+                setLastPosition(21);
+                setDragDisable(true);
+            }
+
+            else {
+                setTaskX(pos.x);
+                setXPosition(pos.x);
+                setDragDisable(false);
+            }
         }
         setLastPosition(pos.x);
     }
@@ -106,7 +110,7 @@ export default function Task({ title, time, index, setTaskList, allTasks, op, re
                     <div className="task" style={{ position: taskX === 20 && 'absolute;left:20px;' || '' }}>
                         <Checkbox />
                         <div className="task-title">
-                            <h1> {title.length > 40 && title.substr(0, 40) + '...' || title} </h1>
+                            <h1> {title.length > 40 && title.substr(0, 39) + '...' || title} </h1>
                             <p> {time} için planlandı </p>
                         </div>
                     </div>
