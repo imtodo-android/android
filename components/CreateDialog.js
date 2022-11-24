@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { SelectList } from 'react-native-dropdown-select-list'
-export default function CreateDialog({ show }) {
+export default function CreateDialog({ show, setShow }) {
     const [opacity, setOpacity] = useState(0);
     const [visible, setVisible] = useState(false);
     const [dialogOpenCount, setDialogOpenCount] = useState(0)
@@ -21,6 +21,9 @@ export default function CreateDialog({ show }) {
 
     const date = new Date();
 
+    function protocolThreeProtectThePilot() {
+        setShow(false);
+    }
 
     const [selectedYear, setSelectedYear] = useState(date.getFullYear());
     const [selectedMonth, setSelectedMonth] = useState(date.getMonth() + 1);
@@ -56,26 +59,6 @@ export default function CreateDialog({ show }) {
 
     let tDate = new Date().getDate();
 
-    useEffect(() => {
-        let theDays = [];
-
-        let mDay = new Date(selectedYear, maxDay, 0).getDate()
-
-        for (let iv = 1; iv < new Date(selectedYear, mDay, 0).getDate(); iv++) {
-            if (selectedYear === date.getFullYear()) {
-                if (iv >= tDate) {
-                    theDays.push({ id: iv, value: iv });
-                }
-
-            }
-            else {
-                theDays.push({ id: iv, value: iv });
-            }
-
-        }
-        setDays(theDays);
-    }, [selectedMonth])
-
     const data = [
         { key: '1', value: 'Ocak' },
         { key: '2', value: 'Şubat' },
@@ -91,6 +74,38 @@ export default function CreateDialog({ show }) {
         { key: '12', value: 'Aralık' },
     ];
 
+    useEffect(() => {
+        let theDays = [];
+
+        let mDay = new Date(selectedYear, maxDay, 0).getDate()
+        let m = selectedMonth;
+
+        for (let iv = 1; iv < new Date(selectedYear, mDay, 0).getDate(); iv++) {
+            if (selectedYear === date.getFullYear()) {
+                if (typeof selectedMonth === 'string') {
+                    for (let key in data) {
+                        if (selectedMonth === data[key].value) {
+                            m = parseInt(key) + 1;
+                        }
+                    }
+                }
+
+                if (m > date.getMonth() + 1) {
+                    theDays.push({ id: iv, value: iv });
+                }
+
+                else if (iv >= tDate) {
+                    console.log('danggg :/');
+                    theDays.push({ id: iv, value: iv });
+                }
+            }
+            else {
+                theDays.push({ id: iv, value: iv });
+            }
+
+        }
+        setDays(theDays);
+    }, [selectedMonth])
 
     const [years, setYears] = useState([
         { key: '1', value: date.getFullYear() },
@@ -106,11 +121,20 @@ export default function CreateDialog({ show }) {
             {
                 visible &&
                 <div className="alert-bg" style={{
-                    opacity: opacity
+                    opacity: opacity,
+                    transition: '250ms'
                 }}>
                     <div className="alert h-75">
+                        <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'row', justifyContent: 'end', width: '90%' }}>
+                            <button className="alert-close" onClick={() => protocolThreeProtectThePilot()}>
+                                <span style={{
+                                    transform: 'rotate(45deg)',
+                                    color:'#fafafa'
+                                }}>+</span>
+                            </button>
+                        </div>
 
-                        <h1 style={{ width: '90%', textAlign: 'start', marginTop: '4rem' }} className="title">✨ harika görevinin ismi ✨</h1>
+                        <h1 style={{ width: '90%', textAlign: 'start', marginTop: '3rem' }} className="title">✨ harika görevinin ismi ✨</h1>
 
                         <input
                             style={{
@@ -165,12 +189,7 @@ export default function CreateDialog({ show }) {
                             <div style={{ width: '90%', display: 'flex', flexDirection: 'row', justifyContent: 'start' }}>
                                 <button style={{ textAlign: 'start', marginTop: '4rem' }} className="button">Görevini ekle</button>
                             </div>
-
                         </div>
-
-                        {/* <div style={{ display: 'flex', flexDirection: 'column' }}>
-                            ...
-                        </div> */}
                     </div>
                 </div>
             }

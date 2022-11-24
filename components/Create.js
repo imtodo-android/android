@@ -11,7 +11,7 @@ export default function Create() {
                 +
             </button>
 
-            <CreateDialog show={showCreatePage} />
+            <CreateDialog show={showCreatePage} setShow={setShowCreatePage} />
         </div>
     )
 }
