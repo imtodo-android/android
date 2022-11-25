@@ -37,7 +37,9 @@ export default function App() {
 
   const [tasks, setTasks] = useState(firstTasks);
   const [reset, setReset] = useState(0);
-  const [doneTasks, setDoneTasks] = useState([]);
+  const [doneTasks, setDoneTasks] = useState([
+    
+  ]);
 
   useEffect(() => {
     return () => {

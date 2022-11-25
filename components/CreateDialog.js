@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { SelectList } from 'react-native-dropdown-select-list'
+import { SelectList } from 'react-native-dropdown-select-list';
+import { AsyncStorage } from 'react-native';
 import done from '../assets/done.svg';
 
 export default function CreateDialog({ show, setShow }) {
@@ -8,7 +9,9 @@ export default function CreateDialog({ show, setShow }) {
     const [dialogOpenCount, setDialogOpenCount] = useState(0);
     const [showSelects, setShowSelects] = useState(false);
     const [selectOpacity, setSelectOpacity] = useState(0);
-    const [checked, setChecked] = useState(false)
+    const [checked, setChecked] = useState(false);
+
+    const [title, setTitle] = useState('')
 
     useEffect(() => {
         if (!show) {
@@ -109,7 +112,7 @@ export default function CreateDialog({ show, setShow }) {
 
         }
         setDays(theDays);
-    }, [selectedMonth])
+    }, [selectedMonth]);
 
     const [years, setYears] = useState([
         { key: '1', value: date.getFullYear() },
@@ -118,7 +121,6 @@ export default function CreateDialog({ show, setShow }) {
         { key: '4', value: date.getFullYear() + 3 },
         { key: '5', value: date.getFullYear() + 4 },
     ]);
-
 
     return (
         <div className={visible && 'just-center-it'}>
@@ -144,6 +146,11 @@ export default function CreateDialog({ show, setShow }) {
                             style={{
                                 marginTop: '0.5rem'
                             }}
+                            onChange={
+                                (e) => {
+                                    setTitle(e.target.value);
+                                }
+                            }
                             type="text" className="input" placeholder="görevinin ismi(zorunlu)" required />
 
                         <div style={{
@@ -234,7 +241,14 @@ export default function CreateDialog({ show, setShow }) {
                         }
 
                         <div style={{ width: '90%', display: 'flex', flexDirection: 'row', justifyContent: 'start' }}>
-                            <button style={{ textAlign: 'start', marginTop: '2rem' }} className="button">Görevini ekle</button>
+                            <button disabled={title == '' ? true : false}
+                                onClick={() => {
+                                    AsyncStorage.setItem('@tasks', title);
+                                    console.log(AsyncStorage.getItem('@tasks'))
+                                }}
+                                style={{ textAlign: 'start', marginTop: '2rem' }} className="button">
+                                Görevini ekle
+                            </button>
                         </div>
                     </div>
                 </div>
