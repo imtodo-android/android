@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react";
 import { SelectList } from 'react-native-dropdown-select-list'
+import done from '../assets/done.svg';
+
 export default function CreateDialog({ show, setShow }) {
     const [opacity, setOpacity] = useState(0);
     const [visible, setVisible] = useState(false);
-    const [dialogOpenCount, setDialogOpenCount] = useState(0)
+    const [dialogOpenCount, setDialogOpenCount] = useState(0);
+    const [showSelects, setShowSelects] = useState(false);
+    const [selectOpacity, setSelectOpacity] = useState(0);
+    const [checked, setChecked] = useState(false)
 
     useEffect(() => {
         if (!show) {
@@ -95,7 +100,6 @@ export default function CreateDialog({ show, setShow }) {
                 }
 
                 else if (iv >= tDate) {
-                    console.log('danggg :/');
                     theDays.push({ id: iv, value: iv });
                 }
             }
@@ -129,7 +133,7 @@ export default function CreateDialog({ show, setShow }) {
                             <button className="alert-close" onClick={() => protocolThreeProtectThePilot()}>
                                 <span style={{
                                     transform: 'rotate(45deg)',
-                                    color:'#fafafa'
+                                    color: '#fafafa'
                                 }}>+</span>
                             </button>
                         </div>
@@ -138,57 +142,99 @@ export default function CreateDialog({ show, setShow }) {
 
                         <input
                             style={{
-                                marginTop: '0.5  rem'
+                                marginTop: '0.5rem'
                             }}
-                            type="text" className="input" placeholder="görevinin ismi" />
+                            type="text" className="input" placeholder="görevinin ismi(zorunlu)" required />
 
                         <div style={{
-                            marginTop: '2rem',
+                            marginTop: '1.5rem',
                             width: '90%'
                         }}>
+                            <div style={{
+                                display: 'flex',
+                                flexDirection: 'row',
+                                alignItems: 'center'
+                            }}>
 
-                            <h1 style={{ width: '90%', textAlign: 'start', marginTop: '4rem' }} className="title">Görevinin bitiş günü</h1>
+                                <button
+                                    onClick={() => {
+                                        setChecked(!checked);
+                                        if (showSelects) {
+                                            setSelectOpacity(0);
+                                            setTimeout(() => {
+                                                setShowSelects(false);
+                                            }, 250);
+                                        }
+                                        else {
+                                            setShowSelects(true);
+                                            setTimeout(() => {
+                                                setSelectOpacity(1);
+                                            })
+                                        }
+                                    }}
+                                    className={`chkbox ${checked && 'chckd'}`}>
+                                    <img src={done} width="15" />
+                                </button>
 
-                            <SelectList
-                                setSelected={(val) => setSelectedMonth(val)}
-                                data={days}
-                                save="value"
-                                label="Günler"
-                                inputStyles={{ color: '#212121' }}
-                                dropdownTextStyles={{ color: '#212121' }}
-                                search={false}
-                                defaultOption={{ key: '12', value: 30 }}
-                            />
-
-                            <h1 style={{ width: '90%', textAlign: 'start', marginTop: '4rem' }} className="title">Görevinin bitiş ayı</h1>
-
-                            <SelectList
-                                setSelected={(val) => setSelectedMonth(val)}
-                                data={months}
-                                save="value"
-                                label="Aylar"
-                                inputStyles={{ color: '#212121' }}
-                                dropdownTextStyles={{ color: '#212121' }}
-                                search={false}
-                                defaultOption={{ key: '12', value: data[date.getMonth()].value }}
-                            />
-
-                            <h1 style={{ width: '90%', textAlign: 'start', marginTop: '4rem' }} className="title">Görevinin bitiş yılı</h1>
-
-                            <SelectList
-                                setSelected={(val) => setSelectedYear(val)}
-                                data={years}
-                                save="value"
-                                label="Yıllar"
-                                inputStyles={{ color: '#212121', borderColor: '#212121' }}
-                                dropdownTextStyles={{ color: '#212121' }}
-                                search={false}
-                                defaultOption={{ key: '1', value: years[0].value }}
-                            />
-
-                            <div style={{ width: '90%', display: 'flex', flexDirection: 'row', justifyContent: 'start' }}>
-                                <button style={{ textAlign: 'start', marginTop: '4rem' }} className="button">Görevini ekle</button>
+                                <span
+                                    style={{ color: '#212121', marginLeft: '0.5rem' }}
+                                >
+                                    zaman belirlemeyi {checked && 'kapat' || 'aç'}
+                                </span>
                             </div>
+                        </div>
+
+                        {
+                            showSelects &&
+                            <div style={{
+                                width: '90%',
+                                transition: '250ms',
+                                opacity: selectOpacity
+                            }}>
+
+                                <h1 style={{ width: '90%', textAlign: 'start', marginTop: '2rem' }} className="title">Görevinin bitiş günü</h1>
+
+                                <SelectList
+                                    setSelected={(val) => setSelectedMonth(val)}
+                                    data={days}
+                                    save="value"
+                                    label="Günler"
+                                    inputStyles={{ color: '#212121' }}
+                                    dropdownTextStyles={{ color: '#212121' }}
+                                    search={false}
+                                    defaultOption={{ key: '12', value: 30 }}
+                                />
+
+                                <h1 style={{ width: '90%', textAlign: 'start', marginTop: '2rem' }} className="title">Görevinin bitiş ayı</h1>
+
+                                <SelectList
+                                    setSelected={(val) => setSelectedMonth(val)}
+                                    data={months}
+                                    save="value"
+                                    label="Aylar"
+                                    inputStyles={{ color: '#212121' }}
+                                    dropdownTextStyles={{ color: '#212121' }}
+                                    search={false}
+                                    defaultOption={{ key: '12', value: data[date.getMonth()].value }}
+                                />
+
+                                <h1 style={{ width: '90%', textAlign: 'start', marginTop: '2rem' }} className="title">Görevinin bitiş yılı</h1>
+
+                                <SelectList
+                                    setSelected={(val) => setSelectedYear(val)}
+                                    data={years}
+                                    save="value"
+                                    label="Yıllar"
+                                    inputStyles={{ color: '#212121', borderColor: '#212121' }}
+                                    dropdownTextStyles={{ color: '#212121' }}
+                                    search={false}
+                                    defaultOption={{ key: '1', value: years[0].value }}
+                                />
+                            </div>
+                        }
+
+                        <div style={{ width: '90%', display: 'flex', flexDirection: 'row', justifyContent: 'start' }}>
+                            <button style={{ textAlign: 'start', marginTop: '2rem' }} className="button">Görevini ekle</button>
                         </div>
                     </div>
                 </div>

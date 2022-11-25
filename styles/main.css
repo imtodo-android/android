@@ -293,6 +293,16 @@ button{
     font-size: 12px;
     border-radius: 8px;
     outline: none;
+    transition: 250ms;
+}
+
+.input:invalid{
+    opacity: 0.5;
+    border: 1px solid #FF3D32;
+}
+.input:focus{
+    opacity: 1;
+    border: 1px solid #87B2F8;
 }
 
 .just-center-it{
@@ -306,4 +316,21 @@ button{
 
 input{
     outline: none;
+}
+
+.chkbox{
+    transition: 250ms;
+    width: 25px;
+    height: 25px;
+    border:1px solid #87B2F8;
+    background-color: transparent;
+    padding:0px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.chckd{
+    background-color: #87B2F8;
 }
