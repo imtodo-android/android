@@ -1,56 +1,53 @@
 import './styles/main.css'
 import { View } from 'react-native';
-import Task from './components/Task'
-import ListTitle from './components/ListTitle'
+import Task from './components/Task';
+import ListTitle from './components/ListTitle';
 import Create from './components/create';
 import { useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function App() {
-
-  const [firstTasks, setFirstTasks] = useState([
-    {
-      title: 'Togg satın al',
-      time: '6 aralık 2022, 06:54',
-      id: '0',
-      opacity: 1
-    },
-    {
-      title: 'DAHA fazla Togg satın al',
-      time: '7 aralık 2022, 06:54',
-      id: '1',
-      opacity: 1
-    },
-    {
-      title: 'DAHA DAHA fazla Togg satın al',
-      time: '8 aralık 2022, 06:54',
-      id: '2',
-      opacity: 1
-    },
-
-    {
-      title: 'DAHA DAHA DAHA DAHA DAHA DAHA fazla Togg satın al',
-      time: '8 aralık 2022, 06:54',
-      id: '3',
-      opacity: 1
-    }
-  ])
-
-  const [tasks, setTasks] = useState(firstTasks);
+  const [firstTasks, setFirstTasks] = useState([])
+  const [tasks, setTasks] = useState([]);
   const [reset, setReset] = useState(0);
-  const [doneTasks, setDoneTasks] = useState([
-    
-  ]);
+  const [doneTasks, setDoneTasks] = useState([]);
+  const [openCount, setOpenCount] = useState(0);
+
+  const getTasks = async () => {
+    const al = await AsyncStorage.getItem('@tasks');
+    if (al !== undefined) {
+      return JSON.parse(al);
+    }
+    return undefined;
+  }
 
   useEffect(() => {
-    return () => {
-      let change = []
+    getTasks().then((r) => {
+      setFirstTasks([...r]);
+    })
+  }, []);
 
+  useEffect(() => {
+    if (openCount < 2) {
+      getTasks().then((r) => {
+        if (r == undefined) {
+          return console.log('anani sikeyim galtasaray');
+        }
+
+        else {
+          setTasks([...r]);
+        }
+      })
+      setOpenCount(openCount + 1)
+    }
+    else {
+      let change = []
       tasks.map((tazk) => {
         if (tazk.opacity === 0) {
           return;
         }
         change.push(tazk);
-      })
+      });
 
       setTimeout(() => {
         setTasks(change);
@@ -71,19 +68,26 @@ export default function App() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
+          zIndex: '9999999999999999999999999999'
         }
       }
     >
-      <ListTitle title="Görevlerin" />
+      {tasks.length > 0 &&
+        <ListTitle title="Görevlerin" />
+      }
 
-      {
+      {tasks.length > 0 &&
         tasks.map((task, index) => {
           return <Task key={index} op={task.opacity} title={task.title} time={task.time} index={task.id} allTasks={tasks} setTaskList={setFirstTasks} reset={reset}
             doneList={doneTasks} setDoneList={setDoneTasks} />
         })
       }
 
-      <Create />
+      <button className="fab" onClick={() => {
+        alert(true);
+      }}>
+        +
+      </button>
     </View>
   );
 }
