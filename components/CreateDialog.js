@@ -1,17 +1,31 @@
 import { useEffect, useState } from "react";
 import { SelectList } from 'react-native-dropdown-select-list';
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import done from '../assets/done.svg';
 
 export default function CreateDialog({ show, setShow }) {
+    const date = new Date();
+
     const [opacity, setOpacity] = useState(0);
     const [visible, setVisible] = useState(false);
     const [dialogOpenCount, setDialogOpenCount] = useState(0);
     const [showSelects, setShowSelects] = useState(false);
     const [selectOpacity, setSelectOpacity] = useState(0);
     const [checked, setChecked] = useState(false);
-
+    const [selectedYear, setSelectedYear] = useState(date.getFullYear());
+    const [selectedMonth, setSelectedMonth] = useState(date.getMonth() + 1);
+    const [months, setMonths] = useState([]);
+    const [days, setDays] = useState([]);
+    const [maxDay, setMaxDay] = useState(1);
+    const [selectedDay, setSelectedDay] = useState(30);
     const [title, setTitle] = useState('')
+    const [iHateReactNative, setIHateReactNative] = useState(0);
+
+    useEffect(() => {
+        if (showSelects) {
+            setIHateReactNative(iHateReactNative + 1);
+        }
+    }, [showSelects])
 
     useEffect(() => {
         if (!show) {
@@ -27,49 +41,45 @@ export default function CreateDialog({ show, setShow }) {
         }
     }, [show]);
 
-    const date = new Date();
-
     function protocolThreeProtectThePilot() {
         setShow(false);
     }
 
-    const [selectedYear, setSelectedYear] = useState(date.getFullYear());
-    const [selectedMonth, setSelectedMonth] = useState(date.getMonth() + 1);
-    const [months, setMonths] = useState([]);
-    const [days, setDays] = useState([]);
-    const [maxDay, setMaxDay] = useState(1);
-    // new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()
+    const protocolTwoUpholdTheMission = async () => {
+        let allTasks = []
+        let year = selectedYear == '1' ? date.getFullYear() : selectedYear;
+
+        const value = await AsyncStorage.getItem('@tasks')
+
+        const parsedValue = JSON.parse(value);
+        if (Array.isArray(parsedValue)) {
+            allTasks.push(...parsedValue);
+        }
+
+        const theTask = {
+            title: title,
+            time: { day: showSelects ? selectedDay : '', month: showSelects ? selectedMonth : '', year: showSelects ? year : '' },
+            id: Array.isArray(parsedValue) ? parsedValue.length : 0
+        }
+
+        allTasks.push(theTask);
+
+        const setT = JSON.stringify(allTasks);
+        try {
+            await AsyncStorage.setItem('@tasks', setT)
+        } catch (e) {
+            console.log(e);
+        }
+    }
 
     useEffect(() => {
         setSelectedYear(date.getFullYear());
         setSelectedMonth(date.getMonth() + 1);
     }, [visible])
 
-    useEffect(() => {
-        let theMonths = [];
-        for (let i = 0; i < 12; i++) {
-            if (selectedYear === date.getFullYear()) {
-                if (i === date.getMonth()) {
-                    setMaxDay(i);
-                }
-
-                if (i >= date.getMonth()) {
-                    theMonths.push(data[i]);
-                }
-            }
-            else {
-                theMonths = data;
-            }
-        }
-        setMonths(theMonths);
-        setDialogOpenCount(dialogOpenCount + 1);
-    }, [selectedYear]);
-
-    let tDate = new Date().getDate();
-
     const data = [
-        { key: '1', value: 'Ocak' },
-        { key: '2', value: 'Şubat' },
+        { key: '1', value: 'Ocak', },
+        { key: '2', value: 'Şubat', },
         { key: '3', value: 'Mart' },
         { key: '4', value: 'Nisan' },
         { key: '5', value: 'Mayıs' },
@@ -83,35 +93,81 @@ export default function CreateDialog({ show, setShow }) {
     ];
 
     useEffect(() => {
+        let theMonths = [];
+        for (let i = 0; i < 12; i++) {
+            if (selectedYear === date.getFullYear() || selectedYear === '1') {
+                if (i === date.getMonth()) {
+                    setMaxDay(i);
+                }
+
+                if (i >= date.getMonth()) {
+                    theMonths.push(data[i]);
+                }
+            }
+        }
+
+        if (!showSelects) {
+            setMonths(theMonths);
+        }
+
+        else {
+            if (selectedYear > date.getFullYear()) {
+                return setMonths(data);
+            }
+            if (iHateReactNative === 1) {
+                return;
+            }
+            setMonths(theMonths);
+        }
+
+        setDialogOpenCount(dialogOpenCount + 1);
+    }, [selectedYear]);
+
+    let tDate = new Date().getDate();
+
+    useEffect(() => {
         let theDays = [];
 
-        let mDay = new Date(selectedYear, maxDay, 0).getDate()
         let m = selectedMonth;
 
-        for (let iv = 1; iv < new Date(selectedYear, mDay, 0).getDate(); iv++) {
-            if (selectedYear === date.getFullYear()) {
-                if (typeof selectedMonth === 'string') {
-                    for (let key in data) {
-                        if (selectedMonth === data[key].value) {
-                            m = parseInt(key) + 1;
-                        }
+        if (!parseInt(m)) {
+            for (let key in data) {
+                if (selectedMonth === data[key].value) {
+                    m = parseInt(key) + 1;
+                }
+            }
+        }
+
+        setTimeout(() => {
+            let mDay = new Date(selectedYear, m, 0).getDate();
+            mDay++;
+
+            for (let iv = 1; iv < mDay; iv++) {
+                if (selectedYear === date.getFullYear() && m == date.getMonth() + 1) {
+                    if (iv >= tDate) {
+                        theDays.push({ id: iv, value: iv });
                     }
                 }
 
-                if (m > date.getMonth() + 1) {
-                    theDays.push({ id: iv, value: iv });
-                }
-
-                else if (iv >= tDate) {
+                else {
                     theDays.push({ id: iv, value: iv });
                 }
             }
+
+            if (!showSelects) {
+                setDays(theDays);
+            }
+
             else {
-                theDays.push({ id: iv, value: iv });
-            }
+                if (theDays.length > 0) {
+                    if (iHateReactNative === 1) {
+                        return setIHateReactNative(2);
+                    }
 
-        }
-        setDays(theDays);
+                    setDays(theDays);
+                }
+            }
+        })
     }, [selectedMonth]);
 
     const [years, setYears] = useState([
@@ -202,14 +258,14 @@ export default function CreateDialog({ show, setShow }) {
                                 <h1 style={{ width: '90%', textAlign: 'start', marginTop: '2rem' }} className="title">Görevinin bitiş günü</h1>
 
                                 <SelectList
-                                    setSelected={(val) => setSelectedMonth(val)}
+                                    setSelected={(val) => setSelectedDay(val)}
                                     data={days}
                                     save="value"
                                     label="Günler"
                                     inputStyles={{ color: '#212121' }}
                                     dropdownTextStyles={{ color: '#212121' }}
                                     search={false}
-                                    defaultOption={{ key: '12', value: 30 }}
+                                    defaultOption={{ key: '12', value: date.getDate() }}
                                 />
 
                                 <h1 style={{ width: '90%', textAlign: 'start', marginTop: '2rem' }} className="title">Görevinin bitiş ayı</h1>
@@ -222,7 +278,7 @@ export default function CreateDialog({ show, setShow }) {
                                     inputStyles={{ color: '#212121' }}
                                     dropdownTextStyles={{ color: '#212121' }}
                                     search={false}
-                                    defaultOption={{ key: '12', value: data[date.getMonth()].value }}
+                                    defaultOption={{ key: data[date.getMonth()].key, value: data[date.getMonth()].value }}
                                 />
 
                                 <h1 style={{ width: '90%', textAlign: 'start', marginTop: '2rem' }} className="title">Görevinin bitiş yılı</h1>
@@ -243,8 +299,7 @@ export default function CreateDialog({ show, setShow }) {
                         <div style={{ width: '90%', display: 'flex', flexDirection: 'row', justifyContent: 'start' }}>
                             <button disabled={title == '' ? true : false}
                                 onClick={() => {
-                                    AsyncStorage.setItem('@tasks', title);
-                                    console.log(AsyncStorage.getItem('@tasks'))
+                                    protocolTwoUpholdTheMission();
                                 }}
                                 style={{ textAlign: 'start', marginTop: '2rem' }} className="button">
                                 Görevini ekle
