@@ -23,7 +23,13 @@ export default function App() {
 
   useEffect(() => {
     getTasks().then((r) => {
-      setFirstTasks([...r]);
+      if (r == undefined) {
+        return;
+      }
+
+      else {
+        setFirstTasks([...r]);
+      }
     })
   }, []);
 
@@ -31,7 +37,7 @@ export default function App() {
     if (openCount < 2) {
       getTasks().then((r) => {
         if (r == undefined) {
-          return console.log('anani sikeyim galtasaray');
+          return;
         }
 
         else {
@@ -68,7 +74,10 @@ export default function App() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          zIndex: '9999999999999999999999999999'
+          justifyContent: tasks.length === 0 ? 'center' : '',
+          height: tasks.length === 0 ? '100%' : 'auto',
+          position: tasks.length === 0 ? 'absolute;top:0;left:0;' : '',
+          paddingBottom: '2rem'
         }
       }
     >
@@ -83,11 +92,18 @@ export default function App() {
         })
       }
 
-      <button className="fab" onClick={() => {
-        alert(true);
-      }}>
-        +
-      </button>
+      {
+        tasks.length === 0 &&
+        <div style={{
+          textAlign: 'center'
+        }}>
+          Henüz bir görev oluşturmamışssın 😳 <br />
+          "+" <br />
+          butonuna basarak bir görev oluşturabilirsin!
+        </div>
+      }
+
+      <Create />
     </View>
   );
 }

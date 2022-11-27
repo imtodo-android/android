@@ -59,14 +59,16 @@ export default function CreateDialog({ show, setShow }) {
         const theTask = {
             title: title,
             time: { day: showSelects ? selectedDay : '', month: showSelects ? selectedMonth : '', year: showSelects ? year : '' },
-            id: Array.isArray(parsedValue) ? parsedValue.length : 0
+            id: Array.isArray(parsedValue) ? parsedValue.length : 0,
+            opacity: 1
         }
 
         allTasks.push(theTask);
 
         const setT = JSON.stringify(allTasks);
         try {
-            await AsyncStorage.setItem('@tasks', setT)
+            await AsyncStorage.setItem('@tasks', setT);
+            protocolThreeProtectThePilot();
         } catch (e) {
             console.log(e);
         }
