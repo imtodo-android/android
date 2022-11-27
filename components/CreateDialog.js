@@ -3,7 +3,7 @@ import { SelectList } from 'react-native-dropdown-select-list';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import done from '../assets/done.svg';
 
-export default function CreateDialog({ show, setShow }) {
+export default function CreateDialog({ show, setShow, open, setOpen }) {
     const date = new Date();
 
     const [opacity, setOpacity] = useState(0);
@@ -43,6 +43,7 @@ export default function CreateDialog({ show, setShow }) {
 
     function protocolThreeProtectThePilot() {
         setShow(false);
+        return setOpen(open + 1);
     }
 
     const protocolTwoUpholdTheMission = async () => {

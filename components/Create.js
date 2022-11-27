@@ -1,6 +1,6 @@
 import CreateDialog from './CreateDialog';
 import { useState, useEffect } from 'react';
-export default function Create() {
+export default function Create({ open, setOpen }) {
     const [showCreatePage, setShowCreatePage] = useState(false);
 
     return (
@@ -11,7 +11,7 @@ export default function Create() {
                 +
             </button>
 
-            <CreateDialog show={showCreatePage} setShow={setShowCreatePage} />
+            <CreateDialog show={showCreatePage} setShow={setShowCreatePage} open={open} setOpen={setOpen} />
         </div>
     )
 }

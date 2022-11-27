@@ -111,11 +111,13 @@ export default function Task({ title, time, index, setTaskList, allTasks, op, re
                         <Checkbox />
                         <div className="task-title">
                             <h1> {title.length > 40 && title.substr(0, 39) + '...' || title} </h1>
-                            {time.day !== '' &&
-                                <p>
-                                    {`${time.day} ${time.month} ${time.year} için planlandı`}
-                                </p>
-                            }
+                            <p>
+                                {time.day !== '' ?
+                                    `${time.day} ${time.month} ${time.year} için planlandı`
+                                    :
+                                    `bir zaman belirlenmedi`
+                                }
+                            </p>
                         </div>
                     </div>
                     {taskX < 0 && <div className="swipe delete" style={{ width: taskX * -1, transition: '250ms' }}><img src={deleteIcon} width="10" height="10" /></div>}

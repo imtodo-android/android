@@ -12,7 +12,7 @@ export default function App() {
   const [reset, setReset] = useState(0);
   const [doneTasks, setDoneTasks] = useState([]);
   const [openCount, setOpenCount] = useState(0);
-
+  const [openz, setOpenz] = useState(0);
   const getTasks = async () => {
     const al = await AsyncStorage.getItem('@tasks');
     if (al !== undefined) {
@@ -22,6 +22,21 @@ export default function App() {
   }
 
   useEffect(() => {
+    if (openCount === 2) {
+      getTasks().then((r) => {
+        if (r == undefined) {
+          return;
+        }
+
+        else {
+          setFirstTasks([...r]);
+          console.log(firstTasks);
+        }
+      })
+    }
+  }, [openz])
+
+  useEffect(() => {
     getTasks().then((r) => {
       if (r == undefined) {
         return;
@@ -29,6 +44,7 @@ export default function App() {
 
       else {
         setFirstTasks([...r]);
+        setTasks([...r]);
       }
     })
   }, []);
@@ -46,15 +62,18 @@ export default function App() {
       })
       setOpenCount(openCount + 1)
     }
+
     else {
       let change = []
-      tasks.map((tazk) => {
+      firstTasks.map((tazk) => {
         if (tazk.opacity === 0) {
           return;
         }
+        console.log(tazk);
         change.push(tazk);
       });
 
+      console.log(change)
       setTimeout(() => {
         setTasks(change);
         setReset(reset + 1)
@@ -103,7 +122,7 @@ export default function App() {
         </div>
       }
 
-      <Create />
+      <Create open={openz} setOpen={setOpenz} />
     </View>
   );
 }
