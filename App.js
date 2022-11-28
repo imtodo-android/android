@@ -74,9 +74,11 @@ export default function App() {
       });
 
       console.log(change)
+      
       setTimeout(() => {
         setTasks(change);
-        setReset(reset + 1)
+        AsyncStorage.setItem('@tasks', JSON.stringify(change));
+        setReset(reset + 1);  
       }, 250);
     }
   }, [firstTasks]);
