@@ -5,14 +5,20 @@ import ListTitle from './components/ListTitle';
 import Create from './components/create';
 import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import TopBar from './components/TopBar';
 
 export default function App() {
+  const [selected, setSelected] = useState([])
   const [firstTasks, setFirstTasks] = useState([])
   const [tasks, setTasks] = useState([]);
   const [reset, setReset] = useState(0);
   const [doneTasks, setDoneTasks] = useState([]);
   const [openCount, setOpenCount] = useState(0);
   const [openz, setOpenz] = useState(0);
+  const [refreshDaTasks, setRefreshTheTasks] = useState(0);
+  const [deleteable, setDeleteable] = useState(false);
+  const [justDeleted, setJustDeleted] = useState(0);
+
   const getTasks = async () => {
     const al = await AsyncStorage.getItem('@tasks');
     if (al !== undefined) {
@@ -20,6 +26,18 @@ export default function App() {
     }
     return undefined;
   }
+
+  useEffect(() => {
+    if (justDeleted > 0) {
+      console.log('why 😭')
+      setRefreshTheTasks(refreshDaTasks + 1);
+      setDeleteable(true)
+      setTimeout(() => {
+        setDeleteable(false);
+        setJustDeleted(-1);
+      }, 1)
+    }
+  }, [justDeleted]);
 
   useEffect(() => {
     if (openCount === 2) {
@@ -30,7 +48,6 @@ export default function App() {
 
         else {
           setFirstTasks([...r]);
-          console.log(firstTasks);
         }
       })
     }
@@ -69,16 +86,13 @@ export default function App() {
         if (tazk.opacity === 0) {
           return;
         }
-        console.log(tazk);
         change.push(tazk);
       });
 
-      console.log(change)
-      
       setTimeout(() => {
         setTasks(change);
         AsyncStorage.setItem('@tasks', JSON.stringify(change));
-        setReset(reset + 1);  
+        setReset(reset + 1);
       }, 250);
     }
   }, [firstTasks]);
@@ -102,6 +116,8 @@ export default function App() {
         }
       }
     >
+      {selected.length > 0 && justDeleted > -1 ? <TopBar deleteit={setJustDeleted} /> : ''}
+
       {tasks.length > 0 &&
         <ListTitle title="Görevlerin" />
       }
@@ -109,7 +125,7 @@ export default function App() {
       {tasks.length > 0 &&
         tasks.map((task, index) => {
           return <Task key={index} op={task.opacity} title={task.title} time={task.time} index={task.id} allTasks={tasks} setTaskList={setFirstTasks} reset={reset}
-            doneList={doneTasks} setDoneList={setDoneTasks} />
+            doneList={doneTasks} setDoneList={setDoneTasks} setSelected={setSelected} irx={index} selected={selected} changeIt={refreshDaTasks} deleteable={deleteable} />
         })
       }
 

@@ -5,7 +5,7 @@ import deleteIcon from '../assets/delete.svg';
 import Dialog from './Dialog';
 import { useState, useEffect } from "react";
 
-export default function Task({ title, time, index, setTaskList, allTasks, op, reset, doneList, setDoneList }) {
+export default function Task({ title, time, index, setTaskList, allTasks, op, reset, doneList, setDoneList, changeIt, setSelected, irx, selected, deleteable }) {
     const [xPosition, setXPosition] = useState(0);
     const [taskX, setTaskX] = useState(0);
     const [dragDisable, setDragDisable] = useState(false);
@@ -83,6 +83,16 @@ export default function Task({ title, time, index, setTaskList, allTasks, op, re
         }
     }, [reset]);
 
+
+    useEffect(()=>{
+        if(deleteable){
+            selected.map((num)=>{
+                if(num === irx){
+                    return changeTasks(true);
+                }
+            })
+        }
+    },[changeIt])
     return (
         <div style={{
             width: '100%',
@@ -108,7 +118,7 @@ export default function Task({ title, time, index, setTaskList, allTasks, op, re
 
                     {taskX > 0 && <div className="swipe done" style={{ width: taskX, transition: '250ms' }}><img src={doneIcon} width="10" height="10" /></div>}
                     <div className="task" style={{ position: taskX === 20 && 'absolute;left:20px;' || '' }}>
-                        <Checkbox />
+                        <Checkbox setSelected={setSelected} irx={irx} selected={selected} />
                         <div className="task-title">
                             <h1> {title.length > 40 && title.substr(0, 39) + '...' || title} </h1>
                             <p>

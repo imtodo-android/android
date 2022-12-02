@@ -16,12 +16,12 @@ body {
     color: #212121;
 }
 
-*{
+* {
     font-family: Poppins;
-    color:#212121
+    color: #212121
 }
 
-button{
+button {
     transition: 250ms;
     outline: none;
 }
@@ -153,7 +153,7 @@ button{
     width: 80px;
 }
 
-.alert-close{
+.alert-close {
     font-size: 20px;
     height: 30px;
     width: 30px;
@@ -164,15 +164,15 @@ button{
     justify-content: center;
     align-items: center;
     position: fixed;
-    border:0px;
+    border: 0px;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    color:#FAFAFA;
+    color: #FAFAFA;
 }
 
-.fab{
+.fab {
     cursor: pointer;
     z-index: 9999999999999999999999999999999999999999999999999999;
     width: 50px;
@@ -189,13 +189,13 @@ button{
     font-size: 20px;
     position: fixed;
     bottom: 15px;
-    right:15px;
-    border:0px;
-    color:#FAFAFA;
+    right: 15px;
+    border: 0px;
+    color: #FAFAFA;
 }
 
-.button{
-    padding:20px;
+.button {
+    padding: 20px;
     border-radius: 12px;
     margin-bottom: 40px;
     background-color: #87B2F8;
@@ -203,37 +203,38 @@ button{
     justify-content: center;
     align-items: center;
     font-size: 12px;
-    border:0px;
-    color:#FAFAFA;
+    border: 0px;
+    color: #FAFAFA;
 }
 
-.title{
-    font-size:14px;
+.title {
+    font-size: 14px;
 }
 
-@media screen and (max-width:900px){
-    .just-center-it{
+@media screen and (max-width:900px) {
+    .just-center-it {
         position: absolute;
-        top:0px;
-        left:0px;
+        top: 0px;
+        left: 0px;
         display: flex;
         justify-content: center;
         align-items: center;
         height: 100%;
         width: 100%;
     }
-    .h-75{
+
+    .h-75 {
         min-height: 75vh;
         overflow-y: auto;
     }
 }
 
 @media screen and (min-width: 900px) {
-    .fab{
+    .fab {
         font-size: 25px;
     }
 
-    .title{
+    .title {
         font-size: 24px;
     }
 
@@ -289,9 +290,9 @@ button{
     }
 }
 
-.input{
+.input {
     width: 89%;
-    border:1px solid #87B2F8;
+    border: 1px solid #87B2F8;
     padding: 4px;
     padding-block: 8px;
     font-size: 12px;
@@ -300,26 +301,27 @@ button{
     transition: 250ms;
 }
 
-.input:invalid{
+.input:invalid {
     opacity: 0.5;
     border: 1px solid #FF3D32;
 }
 
 .button.button:disabled,
-.button.button[disabled]
-{
+.button.button[disabled] {
     cursor: not-allowed;
     opacity: 0.5;
     background: #FF3D32;
 }
 
-.input:focus{
+.input:focus {
     opacity: 1;
     border: 1px solid #87B2F8;
 }
 
-.just-center-it{
-    position: fixed;top:0;left:0;
+.just-center-it {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     display: flex;
@@ -327,32 +329,54 @@ button{
     align-items: center;
 }
 
-input{
+input {
     outline: none;
 }
 
-.chkbox{
+.chkbox {
     transition: 250ms;
     width: 25px;
     height: 25px;
-    border:1px solid #87B2F8;
+    border: 1px solid #87B2F8;
     background-color: transparent;
-    padding:0px;
+    padding: 0px;
     border-radius: 8px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.chckd{
+.chckd {
     background-color: #87B2F8;
 }
 
-@keyframes fadeIn{
-    from{
+@keyframes fadeIn {
+    from {
         opacity: 0;
     }
-    to{
+
+    to {
+        opacity: 1;
+    }
+}
+
+.topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #87B2F8;
+    width: 100%;
+    height: 70px;
+    transition: 250ms;
+    animation: fadeIn 250ms;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
         opacity: 1;
     }
 }

@@ -71,7 +71,7 @@ export default function CreateDialog({ show, setShow, open, setOpen }) {
             await AsyncStorage.setItem('@tasks', setT);
             protocolThreeProtectThePilot();
         } catch (e) {
-            console.log(e);
+            // bu sabah yine her sabah sıkıldım istanbuldaaan
         }
     }
 
