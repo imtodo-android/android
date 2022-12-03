@@ -29,7 +29,6 @@ export default function App() {
 
   useEffect(() => {
     if (justDeleted > 0) {
-      console.log('why 😭')
       setRefreshTheTasks(refreshDaTasks + 1);
       setDeleteable(true)
       setTimeout(() => {
@@ -116,7 +115,7 @@ export default function App() {
         }
       }
     >
-      {selected.length > 0 && justDeleted > -1 ? <TopBar deleteit={setJustDeleted} /> : ''}
+      {selected.length > 0 && justDeleted > -1 && <TopBar count={selected.length} deleteit={setJustDeleted} />}
 
       {tasks.length > 0 &&
         <ListTitle title="Görevlerin" />

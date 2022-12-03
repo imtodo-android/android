@@ -361,6 +361,10 @@ input {
 }
 
 .topbar {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    flex-direction: row;
     position: fixed;
     top: 0;
     left: 0;
