@@ -48,6 +48,7 @@ export default function Task({ title, time, index, setTaskList, allTasks, op, re
             setLastPosition(21);
             setTimeout(() => {
                 changeTasks(true);
+                return false;
             }, 100)
         }
 
@@ -84,15 +85,24 @@ export default function Task({ title, time, index, setTaskList, allTasks, op, re
     }, [reset]);
 
 
-    useEffect(()=>{
-        if(deleteable){
-            selected.map((num)=>{
-                if(num === irx){
+    useEffect(() => {
+        if (deleteable === 'delete') {
+            selected.map((num) => {
+                if (num === irx) {
+                    return changeTasks();
+                }
+            })
+        }
+
+        else if (deleteable === true) {
+            selected.map((num) => {
+                if (num === irx) {
                     return changeTasks(true);
                 }
             })
         }
-    },[changeIt])
+    }, [changeIt])
+
     return (
         <div style={{
             width: '100%',

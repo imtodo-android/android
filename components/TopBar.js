@@ -2,7 +2,7 @@ import done from '../assets/done.svg';
 import deleteIcon from '../assets/delete.svg';
 
 
-export default function TopBar({ deleteit, count, doneit }) {
+export default function TopBar({ doneit, count }) {
     return (
         <div className="topbar">
             <h1 style={{ position: 'fixed', left: '1rem', fontSize: '12px', lineHeight: '15px', fontWeight: 'normal', color: '#fafafa' }}>
@@ -10,13 +10,13 @@ export default function TopBar({ deleteit, count, doneit }) {
             </h1>
 
             <div style={{ marginRight: '1rem', rowGap: '2rem' }}>
-                <button onClick={() => deleteit(true)}
+                <button onClick={() => doneit(true)}
                     style={{ border: '0', background: 'transparent', cursor: 'pointer' }}
                 >
                     <img src={done} height="12" />
                 </button>
 
-                <button onClick={() => deleteit(true)}
+                <button onClick={() => doneit('delete')}
                     style={{ border: '0', background: 'transparent', cursor: 'pointer' }}
                 >
                     <img src={deleteIcon} height="12" />

@@ -17,7 +17,7 @@ export default function App() {
   const [openz, setOpenz] = useState(0);
   const [refreshDaTasks, setRefreshTheTasks] = useState(0);
   const [deleteable, setDeleteable] = useState(false);
-  const [justDeleted, setJustDeleted] = useState(0);
+  const [justDone, setJustDone] = useState(0);
 
   const getTasks = async () => {
     const al = await AsyncStorage.getItem('@tasks');
@@ -28,15 +28,28 @@ export default function App() {
   }
 
   useEffect(() => {
-    if (justDeleted > 0) {
+    if (justDone === 'delete') {
+      console.log('hei!')
+      setRefreshTheTasks(refreshDaTasks + 1);
+      setDeleteable('delete');
+      setTimeout(() => {
+        setDeleteable(false);
+        setJustDone(-1);
+      }, 1)
+    }
+
+    if (justDone > 0) {
       setRefreshTheTasks(refreshDaTasks + 1);
       setDeleteable(true)
       setTimeout(() => {
         setDeleteable(false);
-        setJustDeleted(-1);
+        setJustDone(-1);
       }, 1)
+
     }
-  }, [justDeleted]);
+  }, [justDone]);
+
+  console.log(doneTasks);
 
   useEffect(() => {
     if (openCount === 2) {
@@ -115,7 +128,7 @@ export default function App() {
         }
       }
     >
-      {selected.length > 0 && justDeleted > -1 && <TopBar count={selected.length} deleteit={setJustDeleted} />}
+      {selected.length > 0 && justDone > -1 && <TopBar count={selected.length} doneit={setJustDone} />}
 
       {tasks.length > 0 &&
         <ListTitle title="Görevlerin" />
