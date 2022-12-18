@@ -209,6 +209,7 @@ export default function App() {
                   <div className="task-title">
                     <h1 style={{ marginLeft: '1rem' }}> {doneTask.title.length > 40 && doneTask.title.substr(0, 39) + '...' || doneTask.title}</h1>
                     <p>
+                      Tamamlandı
                     </p>
                   </div>
                 </div>
